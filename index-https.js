@@ -1,9 +1,9 @@
 const https = require('https')
-const fs = require('node:fs')
+const fs = require('fs')
 
 const options = {
-  key: fs.readFileSync('/opt/certs/crm-k9.ru.key'),
-  cert: fs.readFileSync('/opt/certs/crm-k9.ru.crt')
+  key: fs.readFileSync('/etc/letsencrypt/live/crm-k9.ru/privkey.pem'),
+  cert: fs.readFileSync('/etc/letsencrypt/live/crm-k9.ru/fullchain.pem')
 }
 
 require('dotenv').config()
