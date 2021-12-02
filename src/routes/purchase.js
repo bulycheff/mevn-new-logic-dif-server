@@ -4,6 +4,7 @@ const authMiddleware = require('../middleware/auth.middleware')
 const roleMiddleware = require('../middleware/role.middleware')
 
 router.get('/', authMiddleware, purchaseController.getAll)
+router.get('/aggregate', authMiddleware, purchaseController.aggregatePurchases)
 router.get('/:id', authMiddleware, purchaseController.getOneById)
 router.post('/', authMiddleware, purchaseController.create)
 router.delete('/:id', authMiddleware, purchaseController.delete)

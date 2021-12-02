@@ -5,8 +5,8 @@ module.exports = {
   barController: require('./bar.controller'),
   programController: require('./program.controller'),
   clientController: require('./client.controller'),
-
   cardController: require('./categorize/card.controller'),
+
   cashController: require('./categorize/cash.controller'),
   catController: require('./categorize/cat.controller'),
   methodController: require('./categorize/method.controller'),
@@ -14,4 +14,6 @@ module.exports = {
   serviceController: require('./categorize/service.controller'),
   purchaseController: require('./purchase.controller'),
   expenseController: require('./expense.controller'),
+
+  historyController: require('./history.controller'),
 }

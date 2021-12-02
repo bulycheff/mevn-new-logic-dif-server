@@ -12,6 +12,7 @@ const room = require('./categorize/room')
 const service = require('./categorize/service')
 const purchase = require('./purchase')
 const expense = require('./expense')
+const history = require('./history')
 
 module.exports = [
   { path: 'auth', routes: auth },
@@ -28,4 +29,5 @@ module.exports = [
   { path: 'base/service', routes: service },
   { path: 'purchase', routes: purchase },
   { path: 'expense', routes: expense },
+  { path: 'history', routes: history },
 ]
