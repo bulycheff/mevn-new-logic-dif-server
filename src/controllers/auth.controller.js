@@ -80,12 +80,17 @@ module.exports = {
 
   async getUserFromToken({ user }, res) {
     // console.log(user)
-    const userSendData = {
-      username: user.username,
-      role: user.role,
-      name: user.name
+    try {
+      const userSendData = {
+        username: user.username,
+        role: user.role,
+        name: user.name
+      }
+      res.status(200).json({ user: userSendData })
+    } catch (e) {
+      boom.boomify(e)
     }
-    res.status(200).json({ user: userSendData })
+
   },
 
   async getAllUsers(req, res) {

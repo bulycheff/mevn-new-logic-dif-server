@@ -45,8 +45,10 @@ module.exports = {
   async update({ params: { id }, body, user }, res) {
     try {
       const { iat, exp, ...userFields } = user
-      body.closed_by = userFields
+      console.log(user)
+      body.closed_by = user.id
       body.closed_at = new Date()
+      console.log(body)
       const day = await Day.findByIdAndUpdate(id, body, { new: true })
       res.status(200).json(day)
     } catch (e) {

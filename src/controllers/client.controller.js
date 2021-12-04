@@ -1,6 +1,8 @@
 const boom = require('boom')
 const { Day, Client } = require('../models/')
 const { Types } = require('mongoose')
+const { agrClientsPurchases } = require('../queries/agr')
+const { Purchase } = require('../models')
 
 module.exports = {
 
@@ -27,6 +29,18 @@ module.exports = {
       const clients = await Client.find({ day: new Types.ObjectId(dayId) })
       res.status(200).json(clients)
 
+    } catch (e) {
+      boom.boomify(e)
+    }
+  },
+
+  async agrWithPurchasesByDayId(req, res) {
+    try {
+      const id = req.query.dayId
+      const agr = agrClientsPurchases(id)
+      const purchaseListByClient = await Purchase.aggregate(agr)
+
+      res.status(200).json(purchaseListByClient)
     } catch (e) {
       boom.boomify(e)
     }
