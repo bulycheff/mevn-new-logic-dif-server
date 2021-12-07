@@ -23,6 +23,39 @@ module.exports = {
           'foreignField': 'day_id',
           'as': 'purchases'
         }
+      }, {
+        '$lookup': {
+          'from': 'users',
+          'localField': 'opened_by',
+          'foreignField': '_id',
+          'as': 'user'
+        }
+      }, {
+        '$project': {
+          '_id': '$_id',
+          'opened_by': {
+            '$arrayElemAt': [
+              '$user', 0
+            ]
+          },
+          'closed_by': '$closed_by',
+          'status': '$status',
+          'client': '$client',
+          'opened_at': '$opened_at',
+          'closed_at': '$closed_at',
+          'purchases': '$purchases'
+        }
+      }, {
+        '$project': {
+          'opened_by._id': 1,
+          'opened_by.username': 1,
+          'closed_by': 1,
+          'status': 1,
+          'client': 1,
+          'opened_at': 1,
+          'closed_at': 1,
+          'purchases': 1
+        }
       }
     ]
 
