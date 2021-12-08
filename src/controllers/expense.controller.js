@@ -7,7 +7,54 @@ const expenseController = {
   async getAll(req, res) {
     try {
       const day_id = new Types.ObjectId(req.query.day_id)
-      res.status(200).json(await Expense.find({day_id}))
+
+      const aggr = [
+        {
+          '$match': {
+            'day_id': {
+              '$eq': day_id
+            }
+          }
+        }, {
+          '$lookup': {
+            'from': 'users',
+            'localField': 'opened_by',
+            'foreignField': '_id',
+            'as': 'opened_by'
+          }
+        }, {
+          '$lookup': {
+            'from': 'cats',
+            'localField': 'category',
+            'foreignField': '_id',
+            'as': 'category'
+          }
+        }, {
+          '$unwind': {
+            'path': '$category',
+            'preserveNullAndEmptyArrays': true
+          }
+        }, {
+          '$unwind': {
+            'path': '$opened_by',
+            'preserveNullAndEmptyArrays': true
+          }
+        }, {
+          '$project': {
+            '_id': 1,
+            'category._id': 1,
+            'category.name': 1,
+            'opened_by._id': 1,
+            'opened_by.name': 1,
+            'value': 1,
+            'day_id': 1,
+            'opened_at': 1
+          }
+        }
+      ]
+      const data = await Expense.aggregate(aggr)
+      res.status(200).json(data)
+      // res.status(200).json(await Expense.find({day_id}))
     } catch (e) {
       boom.boomify(e)
     }
