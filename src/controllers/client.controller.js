@@ -38,9 +38,46 @@ module.exports = {
     try {
       const id = req.query.dayId
       const agr = agrClientsPurchases(id)
-      const purchaseListByClient = await Purchase.aggregate(agr)
+      let purchaseListByClient = await Purchase.aggregate(agr)
+      let dayIds = await Client.aggregate([
+        {
+          '$match': {
+            'day': {
+              '$eq': new Types.ObjectId(id)
+            }
+          }
+        }, {
+          '$project': {
+            '_id': 1,
+            'name': 1
+          }
+        }
+      ])
 
-      res.status(200).json(purchaseListByClient)
+      dayIds = dayIds.map(item => ({_id: item._id.toString(), name: item.name, program: 0, bar: 0, total: 0}))
+      purchaseListByClient = purchaseListByClient.map(item => {
+        item._id=item._id.toString()
+        return item
+      })
+
+      let clientsTotal = purchaseListByClient.reduce((acc, cur)=> {
+        const idx = dayIds.findIndex(item => item._id===cur._id)
+
+        if(cur.payment_category==='program') {
+          acc[idx]['program']+=cur.sum
+        } else {
+          acc[idx]['bar']+=cur.sum
+        }
+        acc[idx]['total']+=cur.sum
+
+        if(!acc[idx]['name']) {
+          acc[idx]['name'] = cur['name']
+        }
+
+        return acc
+      }, dayIds)
+
+      res.status(200).json(clientsTotal)
     } catch (e) {
       boom.boomify(e)
     }

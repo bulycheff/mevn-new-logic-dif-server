@@ -64,4 +64,3 @@ module.exports.agrClientsPurchases = function (id) {
   ]
 
 }
-
