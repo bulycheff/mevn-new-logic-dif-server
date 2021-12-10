@@ -26,6 +26,8 @@ module.exports = {
       const userRole = [(await Role.findOne({ value: 'user' })).value]
       const userData = { ...req.body, password: hashPassword, role: userRole }
 
+      console.log(userData)
+
       try {
         const createdUser = new User(userData)
         // console.log(createdUser)
